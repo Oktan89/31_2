@@ -12,6 +12,8 @@ public:
 
     virtual int VerticesCount() const = 0;
 
+    virtual void ShowGraph() const = 0;
+
     virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const = 0;
 
     virtual void GetPrevVerices(int vertex, std::vector<int> &vertices) const = 0;

@@ -54,6 +54,11 @@ int ListGraph::VerticesCount() const
     return 0;
 }
 
+void ListGraph::ShowGraph() const
+{
+
+}
+
 void ListGraph::GetNextVertices(int vertex, std::vector<int> &vertices) const
 {
     std::cout << "GetNext" << std::endl;

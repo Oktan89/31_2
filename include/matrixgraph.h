@@ -3,10 +3,16 @@
 #include "igraph.h"
 
 //
-//  MatrixGraph class
+//  MatrixGraph class ориентированный 
+//  (столбец направление от вершины from колонка направление до вершины to)
 //
-class MatrixGraph : public IGraph
+class MatrixGraph : public IGraph 
 {
+    const int c_ratio; //коэффициент емкости :)
+    int _size;
+    int _capacity;
+    bool** _graph;
+    void resize(int new_size);
 
 public:
     MatrixGraph();
@@ -25,9 +31,16 @@ public:
 // Метод должен считать текущее количество вершин
     int VerticesCount() const override;
 
+// Вывод графа в консоль
+    void ShowGraph() const override;
+
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, в которые можно дойти по ребру из данной
-    virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const override;
+    void GetNextVertices(int vertex, std::vector<int> &vertices) const override;
 
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
-    virtual void GetPrevVerices(int vertex, std::vector<int> &vertices) const override;
+    void GetPrevVerices(int vertex, std::vector<int> &vertices) const override;
+
+    int SizeMatrix() const {return _size * 2;}
+
+    int CapacityMatrix() const {return _capacity * 2;}
 };
