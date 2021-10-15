@@ -5,7 +5,7 @@
 //  MatrixGraph implementation
 //
 
-MatrixGraph::MatrixGraph() : c_ratio(10)
+MatrixGraph::MatrixGraph() : c_ratio(0)
 {
     _size_from = 0;
     _size_to = 0;
