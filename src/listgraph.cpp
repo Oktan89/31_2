@@ -1,6 +1,6 @@
-#include "listgraph.h"
 #include <iostream>
-
+#include "listgraph.h"
+#include "matrixgraph.h"
 //
 //  ListGraph implementation
 //
@@ -12,7 +12,15 @@ ListGraph::ListGraph()
 
 ListGraph::ListGraph(IGraph* oth)
 {
-
+    MatrixGraph* matrix = dynamic_cast<MatrixGraph*>(oth);
+    if(matrix)
+    {
+        std::cout << "Convert matrix to list" << std::endl;
+    }
+    else
+    {
+        std::cout << "No convert matrix to list" << std::endl;
+    }
 }
 
 ListGraph::ListGraph(const ListGraph &list_g)
