@@ -4,15 +4,17 @@
 
 //
 //  MatrixGraph class ориентированный 
-//  (столбец направление от вершины from колонка направление до вершины to)
+//  (строка направление от вершины from колонка направление до вершины to)
 //
 class MatrixGraph : public IGraph 
 {
     const int c_ratio; //коэффициент емкости :)
-    int _size;
-    int _capacity;
+    int _size_from;
+    int _size_to;
+    int _capacity_from;
+    int _capacity_to;
     bool** _graph;
-    void resize(int new_size);
+    void resize(int new_size_from, int new_size_to);
 
 public:
     MatrixGraph();
@@ -40,7 +42,7 @@ public:
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
     void GetPrevVerices(int vertex, std::vector<int> &vertices) const override;
 
-    int SizeMatrix() const {return _size * 2;}
+    int SizeMatrix() const {return _size_from + _size_to;}
 
-    int CapacityMatrix() const {return _capacity * 2;}
+    int CapacityMatrix() const {return _capacity_from + _capacity_to;}
 };
