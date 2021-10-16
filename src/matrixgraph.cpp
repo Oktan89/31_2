@@ -5,7 +5,7 @@
 //  MatrixGraph implementation
 //
 
-MatrixGraph::MatrixGraph() : c_ratio(0)
+MatrixGraph::MatrixGraph(int capacity) : c_ratio(capacity)
 {
     _size_from = 0;
     _size_to = 0;
@@ -16,9 +16,9 @@ MatrixGraph::MatrixGraph() : c_ratio(0)
 
 void MatrixGraph::resize(int new_size_from, int new_size_to)
 {
-    ++new_size_from; //Увеличиваем размер на 1 из за принимаемых параметров от 0
-    ++new_size_to; //Увеличиваем размер на 1 из за принимаемых параметров от 0
-    //Создаем временный массив с новым разером
+    //++new_size_from; //Увеличиваем размер на 1 из за принимаемых параметров от 0
+    //++new_size_to; //Увеличиваем размер на 1 из за принимаемых параметров от 0
+    //Создаем временный массив с новым размером
     bool** new_graph = new bool *[new_size_from];
     for(int count_row = 0; count_row < new_size_from; ++count_row)
     {
@@ -94,17 +94,59 @@ MatrixGraph::MatrixGraph(IGraph *oth) : MatrixGraph()
 
 MatrixGraph::MatrixGraph(const MatrixGraph &list_g) : MatrixGraph()
 {
-     //create ptr || copy ptr
      std::cout << "Create copy Matrix" << std::endl;
+     //Выделяем новый размер массива из пямяти
+    _graph = new bool *[list_g._capacity_from];
+    for(int count_row = 0; count_row < list_g._capacity_from; ++count_row)
+    {
+        _graph[count_row] = new bool[list_g._capacity_to];
+    }
+    //Копируем массив 
+     for(int i = 0; i < list_g._size_from; ++i)
+    {
+        for(int j = 0; j < list_g._size_to; ++j)
+        {
+            _graph[i][j] = list_g._graph[i][j];
+        }
+    }
+    _size_from = list_g._size_from;
+    _size_to = list_g._size_to;
+    _capacity_from = list_g._capacity_from;
+    _capacity_to = list_g._capacity_to;
 }
 
 MatrixGraph& MatrixGraph::operator=(const MatrixGraph &list_g)
 {
+    std::cout << "Create copy= Matrix" << std::endl;
     if(this == &list_g)
-            return *this;
-        
-        //delete ptr
-        //create ptr || copy ptr
+        return *this;
+
+    if (_graph != nullptr)
+    {
+        for (int count_col = 0; count_col < _capacity_from; ++count_col)
+        {
+            delete[] _graph[count_col];
+        }
+        delete[] _graph;
+    }
+
+    _graph = new bool *[list_g._capacity_from];
+    for(int count_row = 0; count_row < list_g._capacity_from; ++count_row)
+    {
+        _graph[count_row] = new bool[list_g._capacity_to];
+    }
+    //Копируем массив 
+     for(int i = 0; i < list_g._size_from; ++i)
+    {
+        for(int j = 0; j < list_g._size_to; ++j)
+        {
+            _graph[i][j] = list_g._graph[i][j];
+        }
+    }
+    _size_from = list_g._size_from;
+    _size_to = list_g._size_to;
+    _capacity_from = list_g._capacity_from;
+    _capacity_to = list_g._capacity_to;
 
     return *this;
 }
@@ -121,29 +163,34 @@ MatrixGraph::~MatrixGraph()
 
 void MatrixGraph::AddEdge(int from, int to) 
 {
-    if(from < 0 || to < 0) // провекра на отрицательные
+    // провекра на отрицательные
+    if(from < 0 || to < 0) 
     {
         std::cout << "error input: can't be negative\n";
         return;
     }
-    if(from >= _capacity_from || to >= _capacity_to) //Проверка на длину ребра и если мало увеличиваем массив и емкость
+    //Проверка на длину ребра и если мало увеличиваем массив и емкость
+    if(from >= _capacity_from || to >= _capacity_to) 
     {
-        resize(std::max(from, _capacity_from), std::max(to, _capacity_to));
+        //Увеличиваем размер на 1 из за принимаемых параметров от 0
+        resize(std::max(from+1, _capacity_from), std::max(to+1, _capacity_to)); 
     }
-    if(from > _size_from || to > _size_to) //Проверка на длину ребра и если мало увеличиваем рабочий размер массива
+    //Проверка на длину ребра и если мало увеличиваем рабочий размер массива
+    if(from >= _size_from || to >= _size_to) 
     {
-        _size_from = std::max(_size_from, from)+1 ;
-        _size_to = std::max(_size_to, to) + 1;
+        _size_from = std::max(_size_from, from+1);
+        _size_to = std::max(_size_to, to+1);
     }
+    //Проверка на направление между вершинами, вершины друг на друга указывать не могут
     if(to < _size_from && from < _size_to)
-        if(_graph[to][from]) //Проверка на направление между вершинами, вершины друг на друга указывать не могут
+        if(_graph[to][from]) 
         {
             std::cout << "wrong edge direction\n";
             return;
         }
     //Соединяем вершины от from до to 
     //(индекс строки массива - номер вершины хвоста)
-    //(ндекс колонки массива - номер вершины головы) 
+    //(индекс колонки массива - номер вершины головы) 
     // Например from->to
     _graph[from][to] = true; 
 }
@@ -166,8 +213,8 @@ void MatrixGraph::ShowGraph() const
         for(int j = 0; j < _size_to; ++j)
         {
             std::cout<<_graph[i][j];
-            /*if(_graph[i][j])
-                std::cout << i <<" -> " << j;*/
+            //if(_graph[i][j])
+            //    std::cout << i <<" -> " << j << " ";
         }
         std::cout<<"\n";
     }
