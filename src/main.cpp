@@ -11,6 +11,7 @@ int main()
     MatrixGraph* ptr = new MatrixGraph;
         
     ptr->AddEdge(1, 8);
+    ptr->AddEdge(1, 2);
     ptr->AddEdge(2, 3);
     ptr->AddEdge(3, 4);
     ptr->AddEdge(4, 5);
