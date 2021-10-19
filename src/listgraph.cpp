@@ -59,12 +59,12 @@ void ListGraph::ShowGraph() const
 
 }
 
-void ListGraph::GetNextVertices(int vertex, std::vector<int> &vertices) const
+void ListGraph::GetNextVertices(size_t vertex, std::vector<size_t> &vertices) const
 {
     std::cout << "GetNext" << std::endl;
 }
 
-void ListGraph::GetPrevVerices(int vertex, std::vector<int> &vertices) const
+void ListGraph::GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) const
 {
     std::cout << "GetPrev" << std::endl;
 }

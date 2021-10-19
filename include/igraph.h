@@ -14,9 +14,9 @@ public:
 
     virtual void ShowGraph() const = 0;
 
-    virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const = 0;
+    virtual void GetNextVertices(size_t vertex, std::vector<size_t> &vertices) const = 0;
 
-    virtual void GetPrevVerices(int vertex, std::vector<int> &vertices) const = 0;
+    virtual void GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) const = 0;
 
 };
 

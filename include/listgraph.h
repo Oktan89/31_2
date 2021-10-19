@@ -25,12 +25,12 @@ public:
 // Метод должен считать текущее количество вершин
     int VerticesCount() const override;
 
-// Вывод графа в консоль
+// Вывод графа в консоль 
     void ShowGraph() const override;
 
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, в которые можно дойти по ребру из данной
-    void GetNextVertices(int vertex, std::vector<int> &vertices) const override;
+    void GetNextVertices(size_t vertex, std::vector<size_t> &vertices) const override;
 
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
-    void GetPrevVerices(int vertex, std::vector<int> &vertices) const override;
+    void GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) const override;
 };

@@ -1,4 +1,7 @@
 #include <iostream>
+#include <set>
+#include <cassert>
+#include <climits>
 #include "matrixgraph.h"
 #include "listgraph.h"
 //
@@ -10,6 +13,8 @@ MatrixGraph::MatrixGraph(int capacity) : c_ratio(capacity)
     _size = 0;
     _capacity = 0;
     _graph = nullptr;
+    cache.status = false;
+    cache.vertices = 0;
 }
 
 void MatrixGraph::resize(size_t new_size)
@@ -22,19 +27,19 @@ void MatrixGraph::resize(size_t new_size)
     {
         //Создаем временный массив с новым размером
         new_graph = new bool *[new_size];
-        for (int count_row = 0; count_row < new_size; ++count_row)
+        for (size_t count_row = 0; count_row < new_size; ++count_row)
         {
             new_graph[count_row] = new bool[new_size];
             //Заполняем строку массива
-            for (int j = 0; j < new_size; ++j)
+            for (size_t j = 0; j < new_size; ++j)
             {
                 new_graph[count_row][j] = false;
             }
         }
         //копируем старый массив во временный
-        for (int i = 0; i < new_size; ++i)
+        for (size_t i = 0; i < new_size; ++i)
         {
-            for (int j = 0; j < new_size; ++j)
+            for (size_t j = 0; j < new_size; ++j)
             {
                 if (i < _size)
                 {
@@ -43,7 +48,7 @@ void MatrixGraph::resize(size_t new_size)
             }
         }
         //Удаляем старый массив из пямяти
-        for (int count_col = 0; count_col < _capacity; ++count_col)
+        for (size_t count_col = 0; count_col < _capacity; ++count_col)
         {
             delete[] _graph[count_col];
         }
@@ -58,10 +63,10 @@ void MatrixGraph::resize(size_t new_size)
     
     //Выделяем новый размер массива из пямяти c увеличенной емкостью
     _graph = new bool *[_capacity];
-    for (int count_row = 0; count_row < _capacity; ++count_row)
+    for (size_t count_row = 0; count_row < _capacity; ++count_row)
     {
         _graph[count_row] = new bool[_capacity];
-        for (int j = 0; j < new_size; ++j)
+        for (size_t j = 0; j < new_size; ++j)
         {
             _graph[count_row][j] = false;
         }
@@ -69,15 +74,15 @@ void MatrixGraph::resize(size_t new_size)
     //Копируем массив из временного в постоянный
     if (new_graph != nullptr)
     {
-        for (int i = 0; i < new_size; ++i)
+        for (size_t i = 0; i < new_size; ++i)
         {
-            for (int j = 0; j < new_size; ++j)
+            for (size_t j = 0; j < new_size; ++j)
             {
                 _graph[i][j] = new_graph[i][j];
             }
         }
         //Удаляем временный массив
-        for (int count_col = 0; count_col < new_size; ++count_col)
+        for (size_t count_col = 0; count_col < new_size; ++count_col)
         {
             delete[] new_graph[count_col];
         }
@@ -105,19 +110,19 @@ MatrixGraph::MatrixGraph(const MatrixGraph &list_g) : MatrixGraph()
      std::cout << "Create copy Matrix" << std::endl;
      //Выделяем новый размер массива из пямяти
     _graph = new bool *[list_g._capacity];
-    for(int count_row = 0; count_row < list_g._capacity; ++count_row)
+    for(size_t count_row = 0; count_row < list_g._capacity; ++count_row)
     {
         _graph[count_row] = new bool[list_g._capacity];
         //Заполняем строку массива
-        for (int j = 0; j < list_g._capacity; ++j)
+        for (size_t j = 0; j < list_g._capacity; ++j)
         {
             _graph[count_row][j] = false;
         }
     }
     //Копируем массив 
-     for(int i = 0; i < list_g._size; ++i)
+     for(size_t i = 0; i < list_g._size; ++i)
     {
-        for(int j = 0; j < list_g._size; ++j)
+        for(size_t j = 0; j < list_g._size; ++j)
         {
             _graph[i][j] = list_g._graph[i][j];
         }
@@ -134,7 +139,7 @@ MatrixGraph& MatrixGraph::operator=(const MatrixGraph &list_g)
 
     if (_graph != nullptr)
     {
-        for (int count_col = 0; count_col < _capacity; ++count_col)
+        for (size_t count_col = 0; count_col < _capacity; ++count_col)
         {
             delete[] _graph[count_col];
         }
@@ -142,19 +147,19 @@ MatrixGraph& MatrixGraph::operator=(const MatrixGraph &list_g)
     }
 
     _graph = new bool *[list_g._capacity];
-    for(int count_row = 0; count_row < list_g._capacity; ++count_row)
+    for(size_t count_row = 0; count_row < list_g._capacity; ++count_row)
     {
         _graph[count_row] = new bool[list_g._capacity];
         //Заполняем строку массива
-        for (int j = 0; j < list_g._capacity; ++j)
+        for (size_t j = 0; j < list_g._capacity; ++j)
         {
             _graph[count_row][j] = false;
         }
     }
     //Копируем массив 
-     for(int i = 0; i < list_g._size; ++i)
+     for(size_t i = 0; i < list_g._size; ++i)
     {
-        for(int j = 0; j < list_g._size; ++j)
+        for(size_t j = 0; j < list_g._size; ++j)
         {
             _graph[i][j] = list_g._graph[i][j];
         }
@@ -168,7 +173,7 @@ MatrixGraph& MatrixGraph::operator=(const MatrixGraph &list_g)
 MatrixGraph::~MatrixGraph()
 {
     std::cout << "destructor ~MatrixGraph\n";
-    for(int count_col = 0; count_col < _capacity; ++count_col)
+    for(size_t count_col = 0; count_col < _capacity; ++count_col)
     {
         delete[] _graph[count_col];
     }
@@ -178,7 +183,7 @@ MatrixGraph::~MatrixGraph()
 void MatrixGraph::AddEdge(size_t from, size_t to) 
 {
     // провекра на отрицательные
-    if(from < 0 || to < 0) 
+    if(from == ULONG_MAX || to == ULONG_MAX) 
     {
         std::cout << "error input: can't be negative\n";
         return;
@@ -204,12 +209,30 @@ void MatrixGraph::AddEdge(size_t from, size_t to)
     //(индекс колонки массива - номер вершины головы) 
     // Например from->to
     _graph[from][to] = true; 
+    cache.status = true;
 }
 
 int MatrixGraph::VerticesCount() const
 {
-    
-    return 0;
+    if (cache.status)
+    {
+        std::set<size_t> vertices_count;
+        for (size_t row = 0; row < _size; ++row)
+        {
+            for (size_t col = 0; col < _size; ++col)
+            {
+                if (_graph[row][col] == true)
+                {
+                    vertices_count.insert(row);
+                    vertices_count.insert(col);
+                }
+            }
+        }
+        cache.status = false;
+        cache.vertices = vertices_count.size();
+    }
+   
+   return cache.vertices;
 }
 
 void MatrixGraph::ShowGraph() const
@@ -232,12 +255,35 @@ void MatrixGraph::ShowGraph() const
     std::cout<<std::endl;
 }
 
-void MatrixGraph::GetNextVertices(int vertex, std::vector<int> &vertices) const
+void MatrixGraph::GetNextVertices(size_t vertex, std::vector<size_t> &vertices) const
 {
-    std::cout << "GetNext" << std::endl;
+    if(vertex > _size)
+    {
+        std::cout<< "Incorect vertex" << std::endl;
+        return;
+    }
+
+    for (size_t col = 0; col < _size; ++col)
+    {
+        if (_graph[vertex][col] == true)
+        {
+            vertices.push_back(col);
+        }
+    }
 }
 
-void MatrixGraph::GetPrevVerices(int vertex, std::vector<int> &vertices) const
+void MatrixGraph::GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) const
 {
-    std::cout << "GetPrev" << std::endl;
+    if(vertex > _size)
+    {
+        std::cout<< "Incorect vertex" << std::endl;
+        return;
+    }
+    for (size_t row = 0; row < _size; ++row)
+    {
+        if (_graph[row][vertex] == true)
+        {
+            vertices.push_back(row);
+        }
+    }
 }
