@@ -44,7 +44,7 @@ ListGraph::~ListGraph()
     std::cout << "destructor ~ListGraph\n";
 }
 
-void ListGraph::AddEdge(int from, int to) 
+void ListGraph::AddEdge(size_t from, size_t to) 
 {
     std::cout << from << " : " << to << std::endl;
 }

@@ -9,15 +9,15 @@
 class MatrixGraph : public IGraph 
 {
     const int c_ratio; //коэффициент емкости :)
-    int _size_from;
-    int _size_to;
-    int _capacity_from;
-    int _capacity_to;
+    size_t _size_from;
+    size_t _size_to;
+    size_t _capacity_from;
+    size_t _capacity_to;
     bool** _graph;
-    void resize(int new_size_from, int new_size_to);
+    void resize(size_t new_size_from, size_t new_size_to);
 
 public:
-    MatrixGraph(int capacity = 10);
+    MatrixGraph(int capacity = 0);
     
     MatrixGraph(IGraph *oth);
     
@@ -28,7 +28,7 @@ public:
     ~MatrixGraph();
 
 // Метод принимает вершины начала и конца ребра и добавляет ребро
-    void AddEdge(int from, int to) override;
+    void AddEdge(size_t from, size_t to) override;
 
 // Метод должен считать текущее количество вершин
     int VerticesCount() const override;

@@ -8,7 +8,7 @@ public:
 
     virtual ~IGraph() {};
 
-    virtual void AddEdge(int from, int to) = 0;
+    virtual void AddEdge(size_t from, size_t to) = 0;
 
     virtual int VerticesCount() const = 0;
 

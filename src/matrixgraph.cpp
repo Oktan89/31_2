@@ -14,30 +14,33 @@ MatrixGraph::MatrixGraph(int capacity) : c_ratio(capacity)
     _graph = nullptr;
 }
 
-void MatrixGraph::resize(int new_size_from, int new_size_to)
+void MatrixGraph::resize(size_t new_size_from, size_t new_size_to)
 {
-    //++new_size_from; //Увеличиваем размер на 1 из за принимаемых параметров от 0
-    //++new_size_to; //Увеличиваем размер на 1 из за принимаемых параметров от 0
-    //Создаем временный массив с новым размером
-    bool** new_graph = new bool *[new_size_from];
-    for(int count_row = 0; count_row < new_size_from; ++count_row)
-    {
-        new_graph[count_row] = new bool[new_size_to];
-    }
+    
+    bool **new_graph = nullptr;
+    
     //копируем старый массив во временный если он есть
     if (_graph != nullptr)
     {
+        //Создаем временный массив с новым размером
+        new_graph = new bool *[new_size_from];
+        for (int count_row = 0; count_row < new_size_from; ++count_row)
+        {
+            new_graph[count_row] = new bool[new_size_to];
+            //Заполняем строку массива
+            for (int j = 0; j < new_size_to; ++j)
+            {
+                new_graph[count_row][j] = false;
+            }
+        }
+        //копируем старый массив во временный
         for (int i = 0; i < new_size_from; ++i)
         {
             for (int j = 0; j < new_size_to; ++j)
             {
-                if (i >= _size_from || j >= _size_to)
+                if (i < _size_from && j < _size_to)
                 {
-                    new_graph[i][j] = false;
-                }
-                else
-                {
-                    new_graph[i][j] = _graph[i][j];
+                   new_graph[i][j] = _graph[i][j];
                 }
             }
         }
@@ -49,33 +52,40 @@ void MatrixGraph::resize(int new_size_from, int new_size_to)
         delete[] _graph;
         _graph = nullptr;
     }
-    _capacity_from = new_size_from + c_ratio; //увеличиваем емскость
-    _capacity_to = new_size_to + c_ratio; //увеличиваем емскость
-    //Выделяем новый размер массива из пямяти
-    _graph = new bool *[_capacity_from];
-    for(int count_row = 0; count_row < _capacity_from; ++count_row)
-    {
-        _graph[count_row] = new bool[_capacity_to];
-    }
-    //Копируем массив из временного в постоянный
-     for(int i = 0; i < new_size_from; ++i)
-    {
-        for(int j = 0; j < new_size_to; ++j)
-        {
-            _graph[i][j] = new_graph[i][j];
-        }
-    }
     //Сохраняем новый размер
     _size_from = new_size_from;
     _size_to = new_size_to;
-
-    //Удаляем временный массив
-    for(int count_col = 0; count_col < new_size_from; ++count_col)
+    //увеличиваем емскость
+    _capacity_from = new_size_from + c_ratio; 
+    _capacity_to = new_size_to + c_ratio;    
+    //Выделяем новый размер массива из пямяти c увеличенной емкостью
+    _graph = new bool *[_capacity_from];
+    for (int count_row = 0; count_row < _capacity_from; ++count_row)
     {
-        delete[] new_graph[count_col];
+        _graph[count_row] = new bool[_capacity_to];
+        for (int j = 0; j < new_size_to; ++j)
+        {
+            _graph[count_row][j] = false;
+        }
     }
-    delete[] new_graph;
-    new_graph = nullptr;
+    //Копируем массив из временного в постоянный
+    if (new_graph != nullptr)
+    {
+        for (int i = 0; i < new_size_from; ++i)
+        {
+            for (int j = 0; j < new_size_to; ++j)
+            {
+                _graph[i][j] = new_graph[i][j];
+            }
+        }
+        //Удаляем временный массив
+        for (int count_col = 0; count_col < new_size_from; ++count_col)
+        {
+            delete[] new_graph[count_col];
+        }
+        delete[] new_graph;
+        new_graph = nullptr;
+    }
 }
 
 MatrixGraph::MatrixGraph(IGraph *oth) : MatrixGraph()
@@ -100,6 +110,11 @@ MatrixGraph::MatrixGraph(const MatrixGraph &list_g) : MatrixGraph()
     for(int count_row = 0; count_row < list_g._capacity_from; ++count_row)
     {
         _graph[count_row] = new bool[list_g._capacity_to];
+        //Заполняем строку массива
+        for (int j = 0; j < list_g._capacity_to; ++j)
+        {
+            _graph[count_row][j] = false;
+        }
     }
     //Копируем массив 
      for(int i = 0; i < list_g._size_from; ++i)
@@ -134,6 +149,11 @@ MatrixGraph& MatrixGraph::operator=(const MatrixGraph &list_g)
     for(int count_row = 0; count_row < list_g._capacity_from; ++count_row)
     {
         _graph[count_row] = new bool[list_g._capacity_to];
+        //Заполняем строку массива
+        for (int j = 0; j < list_g._capacity_to; ++j)
+        {
+            _graph[count_row][j] = false;
+        }
     }
     //Копируем массив 
      for(int i = 0; i < list_g._size_from; ++i)
@@ -161,7 +181,7 @@ MatrixGraph::~MatrixGraph()
     delete[] _graph;
 }
 
-void MatrixGraph::AddEdge(int from, int to) 
+void MatrixGraph::AddEdge(size_t from, size_t to) 
 {
     // провекра на отрицательные
     if(from < 0 || to < 0) 
@@ -181,13 +201,7 @@ void MatrixGraph::AddEdge(int from, int to)
         _size_from = std::max(_size_from, from+1);
         _size_to = std::max(_size_to, to+1);
     }
-    //Проверка на направление между вершинами, вершины друг на друга указывать не могут
-    if(to < _size_from && from < _size_to)
-        if(_graph[to][from]) 
-        {
-            std::cout << "wrong edge direction\n";
-            return;
-        }
+
     //Соединяем вершины от from до to 
     //(индекс строки массива - номер вершины хвоста)
     //(индекс колонки массива - номер вершины головы) 

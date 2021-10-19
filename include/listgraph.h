@@ -20,7 +20,7 @@ public:
     ~ListGraph();
 
 // Метод принимает вершины начала и конца ребра и добавляет ребро
-    void AddEdge(int from, int to) override;
+    void AddEdge(size_t from, size_t to) override;
 
 // Метод должен считать текущее количество вершин
     int VerticesCount() const override;
