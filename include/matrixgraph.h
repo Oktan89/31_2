@@ -9,15 +9,14 @@
 class MatrixGraph : public IGraph 
 {
     const int c_ratio; //коэффициент емкости :)
-    size_t _size_from;
-    size_t _size_to;
-    size_t _capacity_from;
-    size_t _capacity_to;
+    size_t _size;
+    size_t _capacity;
     bool** _graph;
-    void resize(size_t new_size_from, size_t new_size_to);
+
+    void resize(size_t new_size);
 
 public:
-    MatrixGraph(int capacity = 0);
+    MatrixGraph(int capacity = 5);
     
     MatrixGraph(IGraph *oth);
     
@@ -42,7 +41,7 @@ public:
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
     void GetPrevVerices(int vertex, std::vector<int> &vertices) const override;
 
-    int SizeMatrix() const {return _size_from * _size_to;}
+    int SizeMatrix() const {return _size;}
 
-    int CapacityMatrix() const {return _capacity_from * _capacity_to;}
+    int CapacityMatrix() const {return _capacity;}
 };

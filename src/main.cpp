@@ -19,8 +19,10 @@ int main()
     ptr->AddEdge(5, 7);
     ptr->AddEdge(6, 7);
     ptr->AddEdge(7, 6);
-    ptr->AddEdge(7, 7);
-     std::cout<< ptr->CapacityMatrix() << std::endl;
+    ptr->AddEdge(9, 7);
+    ptr->AddEdge(9, 9);
+    std::cout<< ptr->SizeMatrix() << std::endl;
+    std::cout<< ptr->CapacityMatrix() << std::endl;
     ptr->ShowGraph();
 
     delete ptr;
