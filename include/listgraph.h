@@ -16,9 +16,9 @@ public:
 
     ListGraph(IGraph* oth);
     
-    ListGraph(const ListGraph &list_g);
+    //ListGraph(const ListGraph &list_g);
 
-    ListGraph& operator= (const ListGraph &list_g);
+    //ListGraph& operator= (const ListGraph &list_g);
 
     ~ListGraph();
 

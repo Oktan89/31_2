@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <climits>
 #include "listgraph.h"
 #include "matrixgraph.h"
 //
@@ -26,7 +27,7 @@ ListGraph::ListGraph(IGraph* oth)
     }
 }
 
-ListGraph::ListGraph(const ListGraph &list_g)
+/*ListGraph::ListGraph(const ListGraph &list_g)
 {
      //create ptr || copy ptr
 }
@@ -40,7 +41,7 @@ ListGraph& ListGraph::operator=(const ListGraph &list_g)
         //create ptr || copy ptr
 
     return *this;
-}
+}*/
 
 ListGraph::~ListGraph()
 {
@@ -49,6 +50,12 @@ ListGraph::~ListGraph()
 
 void ListGraph::AddEdge(size_t from, size_t to)
 {
+    // провекра на отрицательные
+    if(from == ULONG_MAX || to == ULONG_MAX) 
+    {
+        std::cout << "error input: can't be negative\n";
+        return;
+    }
     std::vector<std::size_t> vertices_to{to};
 
     //Вствляем вершины

@@ -14,6 +14,11 @@ int main()
     list.AddEdge(3, 1);
     list.AddEdge(3, 4);
     list.ShowGraph();
+
+    ListGraph list2;
+    list2 = list;
+    list2.ShowGraph();
+
    /* MatrixGraph* ptr = new MatrixGraph(5);
         
     ptr->AddEdge(1, 8);
