@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <vector>
 #include "igraph.h"
 
@@ -7,6 +8,8 @@
 //
 class ListGraph : public IGraph
 {
+
+std::map<std::size_t, std::vector<std::size_t>> _graph;
 
 public:
     ListGraph();

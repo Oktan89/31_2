@@ -7,8 +7,14 @@
 int main()
 {
     
-
-    MatrixGraph* ptr = new MatrixGraph(5);
+    ListGraph list;
+    list.AddEdge(1, 2);
+    list.AddEdge(2, 3);
+    list.AddEdge(2, 4);
+    list.AddEdge(3, 1);
+    list.AddEdge(3, 4);
+    list.ShowGraph();
+   /* MatrixGraph* ptr = new MatrixGraph(5);
         
     ptr->AddEdge(1, 8);
     ptr->AddEdge(1, 2);
@@ -19,20 +25,12 @@ int main()
     ptr->AddEdge(5, 7);
     ptr->AddEdge(6, 7);
     ptr->AddEdge(7, 6);
-    ptr->AddEdge(9, 9);
-    std::cout<< ptr->SizeMatrix() << std::endl;
-    std::cout<< ptr->CapacityMatrix() << std::endl;
+    ptr->AddEdge(10, 10);
+
     ptr->ShowGraph();
     std::cout<< ptr->VerticesCount() <<std::endl;
 
-    std::vector<size_t> vec;
-
-    ptr->GetPrevVertices(7, vec);
-
-    for(auto &v : vec)
-        std::cout<< v << std::endl;
-
-    delete ptr;
+    delete ptr;*/
 
     return 0;
 }

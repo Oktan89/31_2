@@ -1,4 +1,6 @@
 #include <iostream>
+#include <map>
+#include <vector>
 #include "listgraph.h"
 #include "matrixgraph.h"
 //
@@ -8,6 +10,7 @@
 ListGraph::ListGraph()
 {
     std::cout << "constructor ListGraph\n";
+   // _graph = new std::map<std::size_t, std::vector<std::size_t>>;
 }
 
 ListGraph::ListGraph(IGraph* oth)
@@ -44,19 +47,40 @@ ListGraph::~ListGraph()
     std::cout << "destructor ~ListGraph\n";
 }
 
-void ListGraph::AddEdge(size_t from, size_t to) 
+void ListGraph::AddEdge(size_t from, size_t to)
 {
-    std::cout << from << " : " << to << std::endl;
+    std::vector<std::size_t> vertices_to{to};
+
+    //Вствляем вершины
+    auto it = _graph.insert(std::make_pair(from, vertices_to));
+    //Если вершина from уже есть, то вставлем соседа
+    if (!it.second)
+    {
+        it.first->second.push_back(to);
+    }
+    //ищем вершину to в ключах from, если ее нет вставляем пустую
+    auto fit = _graph.find(to);
+    if (fit == _graph.end())
+    {
+        _graph[to] = std::vector<std::size_t>();
+    }
 }
 
 int ListGraph::VerticesCount() const
 {
-    return 0;
+    return _graph.size();
 }
 
 void ListGraph::ShowGraph() const
 {
+    for(auto &it : _graph)
+    {
+        std::cout << it.first;
+        for(auto &verex : it.second)
+            std::cout << "->" << verex;
 
+        std::cout<<std::endl; 
+    }
 }
 
 void ListGraph::GetNextVertices(size_t vertex, std::vector<size_t> &vertices) const
