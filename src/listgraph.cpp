@@ -16,33 +16,31 @@ ListGraph::ListGraph()
 
 ListGraph::ListGraph(IGraph *oth)
 {
+    //Приводим базовый класс к дочернему
     MatrixGraph *matrix = dynamic_cast<MatrixGraph *>(oth);
+    //если не матрица то выходим
     if (matrix)
     {
         std::cout << "Convert matrix to list" << std::endl;
-        if (_graph.size() != 0)
-        {
-            _graph.erase(_graph.begin(), _graph.end());
-        }
-
+        //Полочаем количество вершин в матрице
         std::size_t vertex_count = matrix->VerticesCount();
 
         for (std::size_t i = 0; i < vertex_count + 1; ++i)
         {
             std::vector<std::size_t> vec;
-            matrix->GetNextVertices(i, vec);
-            if (vec.size() != 0)
+            matrix->GetNextVertices(i, vec);//Сотрим соседей вершины
+            if (vec.size() != 0) //если соседи есть
             {
                 for (const auto &n : vec)
-                    this->AddEdge(i, n);
+                    this->AddEdge(i, n);//добавляем ребра от текушей вершины
             }
-            else
+            else//если соседей нет
             {
                 std::vector<std::size_t> vec;
-                matrix->GetPrevVertices(i, vec);
-                if (vec.size() != 0)
+                matrix->GetPrevVertices(i, vec);//смотрим соседей в другую сторону
+                if (vec.size() != 0)//если есть, то добавляем текушую вершину как начальную
                 {
-                    _graph[i] = std::vector<std::size_t>();
+                    _graph[i] = std::vector<std::size_t>();//с пустыми исходящими так как в прямом направлении их нет
                 }
             }
         }
@@ -154,3 +152,10 @@ void ListGraph::GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) co
     }
 }
 
+void ListGraph::GetNameVertices(std::vector<std::size_t> &name) const
+{
+    for(auto it = _graph.begin(); it != _graph.end(); ++it)
+    {
+        name.push_back(it->first);
+    }
+}

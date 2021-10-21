@@ -97,6 +97,20 @@ MatrixGraph::MatrixGraph(IGraph *oth) : MatrixGraph()
     if(list)
     {
         std::cout << "Convert List to Matrix" << std::endl;
+        std::size_t vertex_count = list->VerticesCount();
+        std::vector<std::size_t> name_vertex;
+        list->GetNameVertices(name_vertex);
+        if(name_vertex.size() != vertex_count)
+            return;
+
+        for(std::size_t i_count = 0; i_count < vertex_count; ++i_count)
+        {
+            std::vector<std::size_t> vertex;
+            list->GetNextVertices(name_vertex[i_count], vertex);
+            for(auto &v : vertex)
+                this->AddEdge(name_vertex[i_count], v);
+        }
+        
     }
     else
     {

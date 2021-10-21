@@ -9,7 +9,7 @@ int main()
     
     
 
-    IGraph* ptr = new MatrixGraph(5);
+   /* IGraph* ptr = new MatrixGraph(5);
         
     ptr->AddEdge(1, 8);
     ptr->AddEdge(1, 2);
@@ -21,17 +21,19 @@ int main()
     ptr->AddEdge(6, 7);
     ptr->AddEdge(7, 6);
    
-    ptr->ShowGraph();
+    ptr->ShowGraph();*/
 
-    IGraph* list = new ListGraph(ptr);
-   /* list->AddEdge(1, 2);
+    IGraph* list = new ListGraph;
+    list->AddEdge(1, 2);
     list->AddEdge(2, 3);
     list->AddEdge(2, 4);
     list->AddEdge(3, 1);
-    list->AddEdge(3, 4);*/
+    list->AddEdge(3, 4);
     list->ShowGraph();
     
-    
+    IGraph* ptr = new MatrixGraph(list);
+    ptr->ShowGraph();
+    std::cout << ptr->VerticesCount();
     delete list;
     delete ptr;
 

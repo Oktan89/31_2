@@ -36,4 +36,6 @@ public:
 
 // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
     void GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) const override;
+
+    void GetNameVertices(std::vector<std::size_t> & name) const;
 };
