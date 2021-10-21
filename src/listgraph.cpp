@@ -14,12 +14,38 @@ ListGraph::ListGraph()
    // _graph = new std::map<std::size_t, std::vector<std::size_t>>;
 }
 
-ListGraph::ListGraph(IGraph* oth)
+ListGraph::ListGraph(IGraph *oth)
 {
-    MatrixGraph* matrix = dynamic_cast<MatrixGraph*>(oth);
-    if(matrix)
+    MatrixGraph *matrix = dynamic_cast<MatrixGraph *>(oth);
+    if (matrix)
     {
         std::cout << "Convert matrix to list" << std::endl;
+        if (_graph.size() != 0)
+        {
+            _graph.erase(_graph.begin(), _graph.end());
+        }
+
+        std::size_t vertex_count = matrix->VerticesCount();
+
+        for (std::size_t i = 0; i < vertex_count + 1; ++i)
+        {
+            std::vector<std::size_t> vec;
+            matrix->GetNextVertices(i, vec);
+            if (vec.size() != 0)
+            {
+                for (const auto &n : vec)
+                    this->AddEdge(i, n);
+            }
+            else
+            {
+                std::vector<std::size_t> vec;
+                matrix->GetPrevVertices(i, vec);
+                if (vec.size() != 0)
+                {
+                    _graph[i] = std::vector<std::size_t>();
+                }
+            }
+        }
     }
     else
     {
