@@ -92,11 +92,39 @@ void ListGraph::ShowGraph() const
 
 void ListGraph::GetNextVertices(size_t vertex, std::vector<size_t> &vertices) const
 {
-    std::cout << "GetNext" << std::endl;
+    auto it = _graph.find(vertex);
+
+    if(it != _graph.end())
+    {
+        for(auto &vert : it->second)
+            vertices.push_back(vert);
+    }
+    else
+    {
+        std::cout<< "Incorect vertex" << std::endl;
+    }
 }
 
 void ListGraph::GetPrevVertices(size_t vertex, std::vector<size_t> &vertices) const
 {
-    std::cout << "GetPrev" << std::endl;
+    auto it_g = _graph.find(vertex);
+
+      if(it_g != _graph.end())
+    {
+       for(auto it = _graph.begin(); it != _graph.end(); ++it)
+       {
+          for(std::size_t vec = 0; vec < it->second.size(); ++vec)
+          {
+              if(vertex == it->second[vec])
+              {
+                  vertices.push_back(it->first);
+              }
+          }
+       }
+    }
+    else
+    {
+        std::cout<< "Incorect vertex" << std::endl;
+    }
 }
 

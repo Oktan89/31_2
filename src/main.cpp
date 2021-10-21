@@ -15,9 +15,11 @@ int main()
     list.AddEdge(3, 4);
     list.ShowGraph();
 
-    ListGraph list2;
-    list2 = list;
-    list2.ShowGraph();
+    std::vector<std::size_t> vec;
+    list.GetPrevVertices(5, vec);
+    
+    for(auto &v : vec)
+        std::cout << v << " ";
 
    /* MatrixGraph* ptr = new MatrixGraph(5);
         
