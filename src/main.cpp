@@ -7,10 +7,7 @@
 int main()
 {
     
-    
-
-   /* IGraph* ptr = new MatrixGraph(5);
-        
+    std::shared_ptr<IGraph> ptr = std::make_shared<MatrixGraph>();
     ptr->AddEdge(1, 8);
     ptr->AddEdge(1, 2);
     ptr->AddEdge(2, 3);
@@ -20,22 +17,20 @@ int main()
     ptr->AddEdge(5, 7);
     ptr->AddEdge(6, 7);
     ptr->AddEdge(7, 6);
-   
-    ptr->ShowGraph();*/
-
-    IGraph* list = new ListGraph;
-    list->AddEdge(1, 2);
-    list->AddEdge(2, 3);
-    list->AddEdge(2, 4);
-    list->AddEdge(3, 1);
-    list->AddEdge(3, 4);
-    list->ShowGraph();
-    
-    IGraph* ptr = new MatrixGraph(list);
     ptr->ShowGraph();
-    std::cout << ptr->VerticesCount();
-    delete list;
-    delete ptr;
 
+    std::shared_ptr<IGraph> ptr_list = std::make_shared<ListGraph>(ptr.get());
+
+    ptr_list->ShowGraph();
+
+    std::shared_ptr<IGraph> ptr_list2 = std::make_shared<ListGraph>();
+
+    ptr_list2 = ptr_list;
+
+    ptr_list2->ShowGraph();
+
+    std::shared_ptr<IGraph> ptr2 = std::make_shared<MatrixGraph>(ptr_list2.get());
+    ptr2->ShowGraph();
+    
     return 0;
 }
